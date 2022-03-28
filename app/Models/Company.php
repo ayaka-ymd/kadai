@@ -19,6 +19,7 @@ class Company extends Model
     }
 
     protected $table = 'companies';
+    protected $guarded = ['id'];
     protected $fillable = ['company_name', 'street_address', 'representative_name'];
     protected $dates =  ['created_at', 'updated_at'];
 }

@@ -8,7 +8,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
-
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <!-- Styles -->
         <style>
             html, body {
@@ -77,14 +77,14 @@
               <div class="row">
                 <div class="col-sm">
                   <form method="GET" action="{{ route('searchproduct') }}">
-                    <div class="form-group row">
-                      <label class="col-sm-2 col-form-label">商品名</label>
+                    <div class="searchform-group row">
+                      <label class="col-sm-2 col-form-label" value="product">商品名</label>
                       <?php //入力 ?>
                       <div class="col-sm-5">
                         <input type="text" class="form-control" name="searchWord" value="{{ $searchWord }}">
                       </div>
                       <div class="col-sm-auto">
-                        <button type="submit" class="btn btn-primary ">検索</button>
+                        <button type="submit" class="btn btn-primary">検索</button>
                       </div>
                     </div>
                     <?php //プルダウンメーカー選択 ?>
@@ -157,4 +157,5 @@
         </main>
         @endsection
     </body>
+    <script src="/js/common.js"></script>
 </html>

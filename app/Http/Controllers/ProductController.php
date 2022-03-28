@@ -54,31 +54,42 @@ class ProductController extends Controller
         ]);
     }
 
-    public static function escapeLike($str) 
-    {
-        return str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $str);
-    }
+ // 以下非同期検索結果
+    // public function getProductsByProduct(Request $request) {
+    //     $products = \DB::table('products');
+    //     if ($request->product) {
+    //         $products->where('products.product_name', 'LIKE', '%'.$request->product . '%');
+    //     }
+    //     if ($request->company) {
+    //         $products->where('products.company_id', $request->company);
+    //     }
+    //     return response()->json($products);
+    // }
+
 
     public function newregister(Request $request) 
     {
+        DB::beginTransaction();
+            try{
+                $product = new product;
+                $product->product_id = $request->product_id;
+                $product->product_name = $request->product_name;
+                $product->price = $request->price;
+                $product->stock = $request->stock;
+                $product->comment = $request->comment;
+                $product->img_path = $request->img_path;
+                $product->product->save();
+                DB::commit();
+            }catch (Throwable $e) {
+                DB::rollBack();
+            }
+        
         return view('newregister', [
             'companies' => Company::all(),
         ]);
     }
 
-    public function store(Request $request) 
-    {
-        $product = new product;
-        $product->product_id = $request->product_id;
-        $product->product_name = $request->product_name;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
-        $product->comment = $request->comment;
-        $product->img_path = $request->img_path;
-        $product->product->save();
-
-        return redirect('/')->to('newregister');
-    }
+    
 
     public function detail($id) 
     {
@@ -89,29 +100,34 @@ class ProductController extends Controller
 
     public function edit($id) 
     {
-        $product = Product::find($id);
-
+        DB::beginTransaction();
+            try{
+                $product = Product::find($id);
+                $product->product_id = Auth::id();
+                $product->product_name = $request->input('product_name');
+                $product->price = $request->input('prise');
+                $product->stock = $request->input('stock');
+                $product->comment = $request->input('comment');
+                $product->img_path = $request->input('img_path');
+                $producte->save();
+                DB::commit();
+            }catch (Throwable $e) {
+                DB::rollBack();
+            }
+        
         return view('edit', ['companies' => Company::all()], compact('product'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $product = Product::find($id);
-        $product->product_id = Auth::id();
-        $product->product_name = $request->input('product_name');
-        $product->price = $request->input('prise');
-        $product->stock = $request->input('stock');
-        $product->comment = $request->input('comment');
-        $product->img_path = $request->input('img_path');
-        $producte->save();
-
-        return redirect('/')->with('success', '更新しました');
     }
 
     public function destroy($id) 
     {
-        $product = Product::find($id);
-        $product->delete();
+        try{
+            $product = Product::find($id);
+            $product->product_id = Auth::id();
+            $product->delete();
+            DB::commit();
+        }catch (Throwable $e) {
+            DB::rollBack();
+        }
         
         return redirect()->route('searchproduct');
     }

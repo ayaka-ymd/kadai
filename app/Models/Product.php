@@ -12,8 +12,8 @@ class Product extends Model
         return $this->belongsTo(Company::class);
     }
 
-    protected $guarded = ['id'];
     protected $table = 'products';
+    protected $guarded = ['id'];
     protected $fillable = ['company_id', 'product_name', 'price', 'stook','comment', 'img_path'];
     protected $dates =  ['created_at', 'updated_at'];
 
