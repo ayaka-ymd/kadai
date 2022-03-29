@@ -11,16 +11,21 @@
 |
 */
 
-Route::get('/', 'ProductController@show')->name('show');
+Route::group(['middleware' => 'auth'], function () {
+    return view('searchproduc');
 
-Auth::routes();
+    Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('show', 'ProductController@show')->name('show');
-Route::get('searchproduct', 'ProductController@search')->name('searchproduct');
-Route::get('/newregister', 'ProductController@newregister')->name('newregister');
-Route::post('/newproduct', 'ProductController@newproduct')->name('newproduct');
-Route::get('/detail/{id}', 'ProductController@detail')->name('detail');
-Route::get('/edit/{id}', 'ProductController@edit')->name('edit');
-Route::post('/destroy{id}', 'ProductController@destroy')->name('destroy');
-Route::get('/storage/images', 'ProductController@images')->name('images');
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('show', 'ProductController@show')->name('show');
+    Route::get('searchproduct', 'ProductController@search')->name('searchproduct');
+    Route::get('/newregister', 'ProductController@newregister')->name('newregister');
+    Route::post('/store', 'ProductController@store')->name('store');
+    Route::post('/newproduct', 'ProductController@newproduct')->name('newproduct');
+    Route::get('/detail/{id}', 'ProductController@detail')->name('detail');
+    Route::get('/edit/{id}', 'ProductController@edit')->name('edit');
+    Route::post('/update/{id}', 'ProductController@update')->name('update');
+    Route::post('/destroy{id}', 'ProductController@destroy')->name('destroy');
+    Route::get('/storage/images', 'ProductController@images')->name('images');
+
+});

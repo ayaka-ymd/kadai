@@ -15,12 +15,12 @@ class ProductController extends Controller
         $company = new Company;
         $companies = $company->getLists();
         $searchWord = $request->input('searchWord');
-        $companyId = $request->input('companyId');
+        $company_id = $request->input('company_id');
         
         return view('searchproduct', [
             'companies' => $companies,
             'searchWord' => $searchWord,
-            'companyId' => $companyId
+            'company_id' => $company_id
             
         ]);
     }
@@ -28,15 +28,15 @@ class ProductController extends Controller
     public function search(Request $request) 
     {
         $searchWord = $request->input('searchWord'); 
-        $companyId = $request->input('companyId'); 
+        $company_id = $request->input('company_id'); 
         $query = Product::query();
         
         if (isset($searchWord)) {
             $query->where('product_name', 'like', '%' . $searchWord. '%');
         }
         
-        if (isset($companyId)) {
-            $query->where('company_id', $companyId);
+        if (isset($company_id)) {
+            $query->where('company_id', $company_id);
         }
         
         $products = $query->orderBy('company_id', 'asc')->get();
@@ -50,7 +50,7 @@ class ProductController extends Controller
             'products' => $products,
             'companies' => $companies,
             'searchWord' => $searchWord,
-            'companyId' => $companyId
+            'company_id' => $company_id
         ]);
     }
 
@@ -69,67 +69,77 @@ class ProductController extends Controller
 
     public function newregister(Request $request) 
     {
-        DB::beginTransaction();
-            try{
-                $product = new product;
-                $product->product_id = $request->product_id;
-                $product->product_name = $request->product_name;
-                $product->price = $request->price;
-                $product->stock = $request->stock;
-                $product->comment = $request->comment;
-                $product->img_path = $request->img_path;
-                $product->product->save();
-                DB::commit();
-            }catch (Throwable $e) {
-                DB::rollBack();
-            }
-        
         return view('newregister', [
             'companies' => Company::all(),
         ]);
     }
 
-    
+    public function store(Request $request) 
+    {
+        $product = new product;
+        $inputs = $request->all();
+        $img = $request->file('images');
+        \DB::beginTransaction();
+        try {
+            Product::create($inputs);
+            \DB::commit();
+        } catch(\Throwable $e) {
+            \DB::rollback();
+            throw new \Exception($e->getMessage());
+        }
+        \Session::flash('err_msg', '商品を登録しました');
+
+        return redirect(route('searchproduct'));
+    }
 
     public function detail($id) 
     {
         $product = Product::find($id);
 
-        return view('detail', compact('product'));
+        if (is_null($product)) {
+            \Session::flash('err_msg', 'データがありません');
+            return redirect(route('searchproduct'));
+        }
+
+        return view('detail', ['product' => $product]);
     }
 
     public function edit($id) 
     {
-        DB::beginTransaction();
-            try{
-                $product = Product::find($id);
-                $product->product_id = Auth::id();
-                $product->product_name = $request->input('product_name');
-                $product->price = $request->input('prise');
-                $product->stock = $request->input('stock');
-                $product->comment = $request->input('comment');
-                $product->img_path = $request->input('img_path');
-                $producte->save();
-                DB::commit();
-            }catch (Throwable $e) {
-                DB::rollBack();
-            }
-        
-        return view('edit', ['companies' => Company::all()], compact('product'));
+        $product = Product::find($id);
+
+        if (is_null($product)) {
+            \Session::flash('err_msg', 'データがありません');
+            return redirect(route('searchproduct'));
+        }
+
+        return view('edit', ['companies' => Company::all()], ['product' => $product]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $product = new product;
+        $inputs = $request->all();
+        $img = $request->file('images');
+        \DB::beginTransaction();
+        try {
+            Product::create($inputs);
+            \DB::commit();
+        } catch(\Throwable $e) {
+            \DB::rollback();
+            throw new \Exception($e->getMessage());
+        }
+        \Session::flash('err_msg', '商品を更新しました');
+
+        return redirect(route('searchproduct'));
     }
 
     public function destroy($id) 
     {
-        try{
-            $product = Product::find($id);
-            $product->product_id = Auth::id();
-            $product->delete();
-            DB::commit();
-        }catch (Throwable $e) {
-            DB::rollBack();
-        }
+        $product = Product::find($id);
+        $product->delete();
         
-        return redirect()->route('searchproduct');
+        return redirect(route('searchproduct'));
     }
 
     public function images(Request $request)
@@ -137,7 +147,7 @@ class ProductController extends Controller
         $img_path = Img_path::all();
 
       
-        return view('searchproduct', compact('image'));
+        return view('searchproduct', $img_path);
     }
     
 }

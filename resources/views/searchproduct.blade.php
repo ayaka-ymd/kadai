@@ -91,7 +91,7 @@
                     <div class="form-group row">
                       <label class="col-sm-2">商品メーカー</label>
                       <div class="col-sm-3">
-                          <select name="companyId" class="form-control" value="{{ $companyId }}">
+                          <select name="company_id" class="form-control" value="{{ $company_id }}">
                             <option value="">未選択</option>
 
                             @foreach($companies as $id => $company)
