@@ -11,9 +11,9 @@
 |
 */
 
-Route::group(['middleware' => 'auth'], function () {
-    return view('searchproduc');
-
+Route::get('/', function () {
+    return view('searchproduct');
+});
     Auth::routes();
 
     Route::get('/home', 'HomeController@index')->name('home');
@@ -27,5 +27,3 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/update/{id}', 'ProductController@update')->name('update');
     Route::post('/destroy{id}', 'ProductController@destroy')->name('destroy');
     Route::get('/storage/images', 'ProductController@images')->name('images');
-
-});
