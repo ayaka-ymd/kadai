@@ -14,9 +14,12 @@
 Route::get('/', function () {
     return view('searchproduct');
 });
-    Auth::routes();
 
-    Route::get('/home', 'HomeController@index')->name('home');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['middleware' => 'auth'], function () {
     Route::get('show', 'ProductController@show')->name('show');
     Route::get('searchproduct', 'ProductController@search')->name('searchproduct');
     Route::get('/newregister', 'ProductController@newregister')->name('newregister');
@@ -27,3 +30,4 @@ Route::get('/', function () {
     Route::post('/update/{id}', 'ProductController@update')->name('update');
     Route::post('/destroy{id}', 'ProductController@destroy')->name('destroy');
     Route::get('/storage/images', 'ProductController@images')->name('images');
+});
