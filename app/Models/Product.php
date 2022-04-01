@@ -7,6 +7,24 @@ use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
+    public function getList() {
+        $products = DB::table('products')->get();
+
+        return $products;
+       
+    }
+
+    public function newregister($data) {
+        DB::table('products')->insert([
+            'products' => $data->products,
+            'companies' => $data->companies,
+            'searchWord' => $data->searchWord,
+            'company_id' => $data->company_id,
+            'price' => $data->price,
+            'stock' => $data->stock,
+        ]);
+    }
+    
     public function company()
     {
         return $this->belongsTo(Company::class);

@@ -24,12 +24,21 @@
                       <div class="col-sm-5">
                         <input type="text" class="form-control" name="searchWord" value="{{ $searchWord }}">
                       </div>
-                      <div class="col-sm-auto">
-                        <button type="submit" class="btn btn-primary">検索</button>
+                    </div>
+                    <div class="searchform-group row">
+                      <label class="col-sm-2 col-form-label" value="product">価格</label>
+                      <div class="col-sm-10">
+                        <input type="number" min="0" value=""placeholder="下限" >～<input type="number" value=""placeholder="上限">
+                      </div>
+                    </div>
+                    <div class="searchform-group row">
+                      <label class="col-sm-2 col-form-label" value="product">在庫数</label>
+                      <div class="col-sm-10">
+                        <input type="number" min="0" value=""placeholder="下限">～<input type="number" value=""placeholder="上限">
                       </div>
                     </div>
                     <?php //プルダウンメーカー選択 ?>
-                    <div class="form-group row">
+                    <div class="searchform-group row">
                       <label class="col-sm-2">商品メーカー</label>
                       <div class="col-sm-3">
                           <select name="company_id" class="form-control" value="{{ $company_id }}">
@@ -41,6 +50,9 @@
                             </option>
                             @endforeach
                           </select>
+                      </div>
+                      <div class="col-sm-auto">
+                        <button type="submit" class="btn btn-primary">検索</button>
                       </div>
                     </div>
                   </form>
@@ -81,6 +93,7 @@
                         <input type="submit" class="btn btn-danger btn-dell" value="削除" onClick="delete_alert(event);return false;">
                       </form>
                       <script src="{{ asset('/js/delete.js') }}"></script>
+                      <script src="{{ asset('/js/common.js') }}"></script>
                     </td>
                   </tr>
                   @endforeach

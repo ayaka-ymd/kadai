@@ -28,15 +28,22 @@ class ProductController extends Controller
     public function search(Request $request) 
     {
         $searchWord = $request->input('searchWord'); 
-        $company_id = $request->input('company_id'); 
+        $company_id = $request->input('company_id');
+        $price = $request->input('price');
+        $stock = $request->input('stock');
         $query = Product::query();
         
         if (isset($searchWord)) {
             $query->where('product_name', 'like', '%' . $searchWord. '%');
         }
-        
         if (isset($company_id)) {
             $query->where('company_id', $company_id);
+        }
+        if (isset($price)){
+            $query->where('price', $price);
+        }
+        if (isset($stock)){
+            $query->where('stock', $stock);
         }
         
         $products = $query->orderBy('company_id', 'asc')->get();
@@ -45,27 +52,25 @@ class ProductController extends Controller
         $company = new Company;
         $companies = $company->getLists();
         
+        // 以下非同期検索結果
+        //$products = \DB::table('products');
+        //if ($request->product) {
+           //$products->where('products.product_name', 'LIKE', '%'.$request->product . '%');
+        //}
+        //if ($request->company) {
+            //$products->where('products.company_id', $request->company);
+        //}
+        //return response()->json($products);
 
         return view('searchproduct', [
             'products' => $products,
             'companies' => $companies,
             'searchWord' => $searchWord,
-            'company_id' => $company_id
+            'company_id' => $company_id,
+            'price' => $price,
+            'stock' => $stock
         ]);
     }
-
- // 以下非同期検索結果
-    // public function getProductsByProduct(Request $request) {
-    //     $products = \DB::table('products');
-    //     if ($request->product) {
-    //         $products->where('products.product_name', 'LIKE', '%'.$request->product . '%');
-    //     }
-    //     if ($request->company) {
-    //         $products->where('products.company_id', $request->company);
-    //     }
-    //     return response()->json($products);
-    // }
-
 
     public function newregister(Request $request) 
     {
