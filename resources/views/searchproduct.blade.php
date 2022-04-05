@@ -26,15 +26,17 @@
                       </div>
                     </div>
                     <div class="searchform-group row">
-                      <label class="col-sm-2 col-form-label" value="product">価格</label>
+                      <label class="col-sm-2 col-form-label" value="price">価格</label>
                       <div class="col-sm-10">
-                        <input type="number" min="0" value=""placeholder="下限" >～<input type="number" value=""placeholder="上限">
+                        <input type="number" min="0" name="minprice" value="{{ $minprice }}" placeholder="以上" >～
+                        <input type="number" name="maxprice" value="{{ $maxprice }}" placeholder="以下">
                       </div>
                     </div>
                     <div class="searchform-group row">
-                      <label class="col-sm-2 col-form-label" value="product">在庫数</label>
+                      <label class="col-sm-2 col-form-label" value="stock">在庫数</label>
                       <div class="col-sm-10">
-                        <input type="number" min="0" value=""placeholder="下限">～<input type="number" value=""placeholder="上限">
+                        <input type="number" min="0" name="minstock" value="{{ $minstock }}" placeholder="以上">～
+                        <input type="number" name="maxstock" value="{{ $maxstock }}" placeholder="以下">
                       </div>
                     </div>
                     <?php //プルダウンメーカー選択 ?>
@@ -67,12 +69,12 @@
               <table class="table table-hover">
                   <thead style="background-color: #ffd900">
                     <tr>
-                    <th style="width:30%">id</th>
-                    <th>商品画像</th>
-                    <th>商品名</th>
-                    <th>価格</th>
-                    <th>在庫数</th>
-                    <th>メーカー名</th>
+                    <th scope="col">@sortablelink('id', 'id')</th>
+                    <th scope="col">@sortablelink('img_path', '商品画像')</th>
+                    <th scope="col">@sortablelink('product_name', '商品名')</th>
+                    <th scope="col">@sortablelink('price', '価格')</th>
+                    <th scope="col">@sortablelink('stock', '在庫数')</th>
+                    <th scope="col">@sortablelink('company_name', 'メーカー名')</th>
                     <th>詳細表示</th>
                     <th>削除</th>
                     </tr> 

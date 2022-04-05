@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class Company extends Model
 {
-    public function getLists()
+    public function getList()
     {
         $companies = DB::table("companies")->select("id", "company_name")->get();
 

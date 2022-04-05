@@ -10,47 +10,41 @@ use App\Models\Company;
 
 class ProductController extends Controller
 {
-    public function show(Request $request) 
+    public function searchproduct(Request $request) 
     {
+        $products = Product::all();
         $company = new Company;
-        $companies = $company->getLists();
-        $searchWord = $request->input('searchWord');
-        $company_id = $request->input('company_id');
-        
-        return view('searchproduct', [
-            'companies' => $companies,
-            'searchWord' => $searchWord,
-            'company_id' => $company_id
-            
-        ]);
-    }
-
-    public function search(Request $request) 
-    {
+        $companies = $company->getList();
         $searchWord = $request->input('searchWord'); 
         $company_id = $request->input('company_id');
-        $price = $request->input('price');
-        $stock = $request->input('stock');
+        $minprice = $request->input('minprice');
+        $maxprice = $request->input('maxprice');
+        $minstock = $request->input('minstock');
+        $maxstock = $request->input('maxstock');
         $query = Product::query();
         
         if (isset($searchWord)) {
-            $query->where('product_name', 'like', '%' . $searchWord. '%');
+            $query->where('product_name', 'like', '%'.$searchWord.'%');
         }
         if (isset($company_id)) {
-            $query->where('company_id', $company_id);
+            $query->where('company_id', '=', $company_id);
         }
-        if (isset($price)){
-            $query->where('price', $price);
+        if (isset($minprice)){
+            $query->where('price', '>=', $minprice);
         }
-        if (isset($stock)){
-            $query->where('stock', $stock);
+        if (isset($maxprice)){
+            $query->where('price', '<=', $maxprice);
+        }
+        if (isset($minstock)){
+            $query->where('stock', '>=', $minstock);
+        }
+        if (isset($maxstock)){
+            $query->where('stock', '<=', $maxstock);
         }
         
-        $products = $query->orderBy('company_id', 'asc')->get();
-
         
-        $company = new Company;
-        $companies = $company->getLists();
+        $products = Product::sortable()->get();
+        
         
         // 以下非同期検索結果
         //$products = \DB::table('products');
@@ -67,8 +61,10 @@ class ProductController extends Controller
             'companies' => $companies,
             'searchWord' => $searchWord,
             'company_id' => $company_id,
-            'price' => $price,
-            'stock' => $stock
+            'minprice' => $minprice,
+            'maxprice' => $maxprice,
+            'minstock' => $minstock,
+            'maxstock' => $maxstock
         ]);
     }
 
@@ -100,6 +96,7 @@ class ProductController extends Controller
     public function detail($id) 
     {
         $product = Product::find($id);
+        $companies = $company->getLists();
 
         if (is_null($product)) {
             \Session::flash('err_msg', 'データがありません');
