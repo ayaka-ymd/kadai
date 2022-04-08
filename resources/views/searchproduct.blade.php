@@ -89,7 +89,7 @@
                     <td>{{ $product->price }}円</td>
                     <td>{{ $product->stock }}</td>
                     <td>{{ $company->company_name }}</td>
-                    <td><a href="{{ route('detail', ['id'=>$product->id]) }}" class="btn btn-primary btn-sm">商品詳細</a></td>
+                    <td><a href="{{ route('detail', ['id'=>$product->id]) }}" class="btn btn-primary">詳細</a></td>
                     <td>
                       <form action="{{ route('destroy', ['id'=>$product->id]) }}" method='post' onsubmit="return confirm_test()">
                         <input type="submit" class="btn btn-danger btn-dell" value="削除" onClick="delete_alert(event);return false;">

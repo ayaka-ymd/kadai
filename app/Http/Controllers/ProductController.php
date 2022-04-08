@@ -41,9 +41,10 @@ class ProductController extends Controller
         if (isset($maxstock)){
             $query->where('stock', '<=', $maxstock);
         }
-        
-        
-        $products = Product::sortable()->get();
+        if (isset($data)){
+            $data = $products->orderBy('id', 'asc')->get();
+        }
+        $products = $query->get();
         
         
         // 以下非同期検索結果
@@ -96,7 +97,6 @@ class ProductController extends Controller
     public function detail($id) 
     {
         $product = Product::find($id);
-        $companies = $company->getLists();
 
         if (is_null($product)) {
             \Session::flash('err_msg', 'データがありません');
