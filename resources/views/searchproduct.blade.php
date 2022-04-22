@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
     @extends('layouts.common')
+      <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>商品情報一覧画面</title>
     </head>
     <body>
@@ -10,19 +11,19 @@
         @section('content')
         <main>
           <div class="container">
-            <div class="mx-auto">
+            <div class="searchform">
               <br>
               <h2 class="text-center">商品情報一覧画面</h2>
               <br>
               <?php //検索フォーム ?>
               <div class="row">
-                <div class="col-sm">
+                <div class="searchform col-sm">
                   <form method="GET" action="{{ route('searchproduct') }}">
                     <div class="searchform-group row">
                       <label class="col-sm-2 col-form-label" value="product">商品名</label>
                       <?php //入力 ?>
                       <div class="col-sm-5">
-                        <input type="text" class="form-control" name="searchWord" value="{{ $searchWord }}">
+                        <input type="text" id="serch-text" name="searchWord" value="{{ $searchWord }}">
                       </div>
                     </div>
                     <div class="searchform-group row">
@@ -64,7 +65,9 @@
 
             <?php //検索結果テーブル 検索された時のみ表示する ?>
             @if (!empty($products))
-            <div class="productTable">
+            <div class="search-result">
+              <div class="search-result__hit-num"></div>
+              <div id="search-result__list"></div>
               <p>全{{ $products->count() }}件</p>
               <table class="table table-hover">
                   <thead style="background-color: #ffd900">
@@ -80,7 +83,7 @@
                     </tr> 
                   </thead>
                   @foreach($products as $product)
-                  <tr>
+                  <tr class="target-area">
                     <td>{{ $product->id }}</td>
                     <td>
                       <img src="{{ $product->img_path }}" width="70" height="100">
@@ -106,5 +109,7 @@
           <a href="http://localhost:8888/kadai/public/newregister" class="btn btn-primary btn-sm">商品新規登録</a>
         </main>
         @endsection
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
     </body>
 </html>

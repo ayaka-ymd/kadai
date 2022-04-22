@@ -2,17 +2,17 @@ $('.searchform-group .btn btn-primary').on('click', function () {
     $('.products-table tbody').empty(); //もともとある要素を空にする
     $('.search-null').remove(); //検索結果が0のときのテキストを消す
 
-    let productName = $('#searchWord').val(); //検索ワードを取得
+    let product_name = $('#searchWord').val(); //検索ワードを取得
 
-    if (!productName) {
+    if (!product_name) {
         return false;
     } //ガード節で検索ワードが空の時、ここで処理を止めて何もビューに出さない
 
     $.ajax({
         type: 'GET',
-        url: 'searchproduct' + productName, //web.phpのURLと同じ形にする
+        url: 'searchproduct' + product_name, //web.phpのURLと同じ形にする
         data: {
-            'searchproduct': productName, //ここはサーバーに贈りたい情報。今回は検索ファームのバリューを送りたい。
+            'searchproduct': product_name, //ここはサーバーに贈りたい情報。今回は検索ファームのバリューを送りたい。
         },
         dataType: 'json', //json形式で受け取る
 
@@ -22,7 +22,7 @@ $('.searchform-group .btn btn-primary').on('click', function () {
     }).done(function (data) {
         $('.loading').addClass('display-none'); //通信中のぐるぐるを消す
         let html = '';
-        $.each(data, function (searchproduct, value) { //dataの中身からvalueを取り出す
+        $.each(data, function (_searchproduct, value) { //dataの中身からvalueを取り出す
         //ここの記述はリファクタ可能
         let id = value.id;
         let img_path = value.img_path;
@@ -30,9 +30,9 @@ $('.searchform-group .btn btn-primary').on('click', function () {
         let price = value.price;
         let stock = value.stock;
         let company_name = value.company_name;
-        // １ユーザー情報のビューテンプレートを作成 //${}で変数展開
+        // 情報のビューテンプレートを作成 //${}で変数展開
         html = `
-                <tr class="table table-hover"> 
+                <tr class="target-area"> 
                     <td class="col-xs-2"><img src="${img_path}" class="rounded-circle img_path"></td> 
                     <td class="col-xs-2">${product_name}</td>
                     <td class="col-xs-2">${price}</td>
@@ -42,10 +42,10 @@ $('.searchform-group .btn btn-primary').on('click', function () {
                 </tr>
                 `
         })
-        $('.products-table tbody').append(html); //できあがったテンプレートをビューに追加
+        $('.target-area').append(html); //できあがったテンプレートをビューに追加
     // 検索結果がなかったときの処理
         if (data.length === 0) {
-            $('.product-index-wrapper').after('<p class="text-center mt-5 search-null">商品が見つかりません</p>');
+            $('.target-area').after('<p class="text-center mt-5 search-null">商品が見つかりません</p>');
         }
 
     }).fail(function (){

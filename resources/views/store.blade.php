@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
     @extends('layouts.common')
-        <title>商品新規登録</title>
+        <title>商品新規登録</title>  
     </head>
     <body>
         @extends('layouts.app')
@@ -15,7 +15,7 @@
 
                 <div class="row mt-5 mb-5">
                     <div class="col-sm-5 mx-auto">
-                        <form method="POST" action="{{ route('newregister') }}" onSubmit="return checkSubmit()">
+                        <form method="POST" action="{{ route('store') }}" onSubmit="return checkSubmit()">
                         @csrf
                             <div class="form-group-sm clearfix">
                                 <label for="formGroupExampleInput2" class="mt-3 mb-0">商品名</label>
@@ -58,7 +58,7 @@
                             </div>
 
                             <div class="form-group-sm clearfix">
-                                <form method="POST" action="{{ route('newregister') }}" enctype="multipart/form-data">
+                                <form method="POST" action="{{ route('store') }}" enctype="multipart/form-data">
                                     <p>商品画像
                                         <input type="file" name="filename">
                                     </p>

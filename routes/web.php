@@ -20,10 +20,10 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
     Route::get('searchproduct', 'ProductController@searchproduct')->name('searchproduct');
     Route::get('/newregister', 'ProductController@newregister')->name('newregister');
-    Route::post('/store', 'ProductController@store')->name('store');
-    Route::post('/newproduct', 'ProductController@newproduct')->name('newproduct');
+    Route::post('/newregister', 'ProductController@store')->name('store');
     Route::get('/detail/{id}', 'ProductController@detail')->name('detail');
     Route::get('/edit/{id}', 'ProductController@edit')->name('edit');
+    
     Route::post('/update/{id}', 'ProductController@update')->name('update');
     Route::post('/destroy{id}', 'ProductController@destroy')->name('destroy');
     Route::get('/storage/images', 'ProductController@images')->name('images');

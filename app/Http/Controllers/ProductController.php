@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Product;
 use App\Models\Company;
+use App\Http\Requests\ProductRequest;
+use Illuminate\Support\Facades\DB;
+
 
 class ProductController extends Controller
 {
@@ -41,11 +44,8 @@ class ProductController extends Controller
         if (isset($maxstock)){
             $query->where('stock', '<=', $maxstock);
         }
-        if (isset($data)){
-            $data = $products->orderBy('id', 'asc')->get();
-        }
-        $products = $query->get();
         
+        $products = $query->sortable()->get();
         
         // 以下非同期検索結果
         //$products = \DB::table('products');
@@ -78,20 +78,27 @@ class ProductController extends Controller
 
     public function store(Request $request) 
     {
-        $product = new product;
         $inputs = $request->all();
-        $img = $request->file('images');
+        $img_path = $request->file('images');
+
+        // 画像がアップロードされていれば、storageに保存
+        if ($request->hasFile('images')) {
+            $path = \Storage::put('/public', $image_path);
+            $path = explode('/', $path);
+        } else {
+            $path = null;
+        }
+
         \DB::beginTransaction();
         try {
             Product::create($inputs);
             \DB::commit();
         } catch(\Throwable $e) {
             \DB::rollback();
-            throw new \Exception($e->getMessage());
         }
         \Session::flash('err_msg', '商品を登録しました');
 
-        return redirect(route('searchproduct'));
+        return redirect(route('newregister'));
     }
 
     public function detail($id) 
